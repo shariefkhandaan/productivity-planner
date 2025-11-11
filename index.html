@@ -55,7 +55,7 @@
             align-items: center;
         }
 
-        .print-bundle-btn {
+        .print-bundle-btn, .action-btn {
             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             color: white;
             border: none;
@@ -70,7 +70,11 @@
             white-space: nowrap;
         }
 
-        .print-bundle-btn:active {
+        .reset-all-btn {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+        }
+
+        .print-bundle-btn:active, .action-btn:active {
             transform: scale(0.95);
         }
 
@@ -141,6 +145,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
         .print-button {
             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             color: white;
@@ -149,16 +160,65 @@
             border-radius: 8px;
             font-size: 0.95em;
             cursor: pointer;
-            margin-bottom: 20px;
             transition: transform 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            width: 100%;
+            flex: 1;
             justify-content: center;
+            min-width: 150px;
         }
 
-        .print-button:active {
+        .reset-button {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            min-width: 150px;
+        }
+
+        .print-button:active, .reset-button:active {
+            transform: scale(0.95);
+        }
+
+        .calendar-container {
+            margin-top: 15px;
+        }
+
+        .calendar-week-selector {
+            display: none;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .calendar-week-btn {
+            padding: 10px 15px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .calendar-week-btn.active {
+            background: #000;
+            color: white;
+        }
+
+        .calendar-week-btn:active {
             transform: scale(0.95);
         }
 
@@ -166,7 +226,6 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
-            margin-top: 15px;
         }
 
         .day-header {
@@ -636,21 +695,93 @@
 
         .save-indicator {
             position: fixed;
-            top: 15px;
+            top: 70px;
             right: 15px;
             background: #00b894;
             color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 0.9em;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1em;
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-weight: 500;
         }
 
         .save-indicator.show {
             opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            animation: fadeIn 0.2s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #d63031;
+            font-size: 1.3em;
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.95);
+        }
+
+        .modal-btn-danger {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+        }
+
+        .modal-btn-cancel {
+            background: #95a5a6;
+            color: white;
         }
 
         /* Desktop styles */
@@ -699,8 +830,19 @@
                 min-width: 120px;
             }
 
-            .print-button {
-                width: auto;
+            .button-group {
+                flex-wrap: nowrap;
+            }
+
+            .print-button, .reset-button {
+                flex: 0 1 auto;
+            }
+        }
+
+        /* Mobile calendar week selector */
+        @media (max-width: 767px) {
+            .calendar-week-selector {
+                display: flex;
             }
         }
 
@@ -717,7 +859,7 @@
                 max-width: 100%;
             }
 
-            .header, .tabs, .print-button, .print-menu, .eco-toggle, .week-btn {
+            .header, .tabs, .button-group, .print-menu, .eco-toggle, .week-btn, .calendar-week-selector, .calendar-week-btn {
                 display: none !important;
             }
 
@@ -738,7 +880,7 @@
                 min-height: 60px;
             }
 
-            .save-indicator {
+            .save-indicator, .modal {
                 display: none !important;
             }
 
@@ -749,42 +891,37 @@
             .meal-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+
+            .calendar-grid {
+                display: grid !important;
+            }
         }
 
         @page {
             size: A4;
             margin: 15mm;
         }
-
-        /* Scrollbar styling for desktop */
-        @media (min-width: 768px) {
-            ::-webkit-scrollbar {
-                width: 8px;
-                height: 8px;
-            }
-
-            ::-webkit-scrollbar-track {
-                background: #f1f1f1;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 4px;
-            }
-
-            ::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="save-indicator" id="saveIndicator">✓ Auto-saved</div>
+    <div class="save-indicator" id="saveIndicator">✓ Saved successfully!</div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="modal">
+        <div class="modal-content">
+            <h3>⚠️ Are You Sure?</h3>
+            <p id="resetMessage">This will clear all data and cannot be undone!</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeResetModal()">Cancel</button>
+                <button class="modal-btn modal-btn-danger" onclick="confirmReset()">Yes, Reset</button>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <div class="header">
             <h1>📋 Sharief's Productivity Pack v2.0</h1>
-            <p>Mobile-Optimized • Auto-Saving</p>
+            <p>Mobile-Optimized • Auto-Saving • Enhanced</p>
         </div>
 
         <div class="print-menu">
@@ -792,6 +929,10 @@
             <button class="print-bundle-btn" onclick="printBundle('weekly')">📆 Weekly</button>
             <button class="print-bundle-btn" onclick="printBundle('daily')">⏰ Daily</button>
             <button class="print-bundle-btn" onclick="printBundle('all')">📖 All</button>
+            <button class="action-btn" onclick="exportData()">💾 Export</button>
+            <button class="action-btn" onclick="document.getElementById('importFile').click()">📥 Import</button>
+            <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+            <button class="reset-all-btn action-btn" onclick="showResetModal('all')">🗑️ Reset All</button>
             
             <div class="eco-toggle">
                 <label for="ecoMode">♻️</label>
@@ -814,7 +955,10 @@
         <div class="content">
             <!-- Monthly Calendar -->
             <div id="monthly" class="page active" data-bundle="monthly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('monthly')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>🗓️ Monthly Calendar</h2>
@@ -824,17 +968,21 @@
                     <label>Month & Year:</label>
                     <input type="text" class="auto-save" data-key="monthly-name" placeholder="e.g., January 2025">
                 </div>
-                
-                <div class="calendar-grid">
-                    <div class="day-header">Mon</div>
-                    <div class="day-header">Tue</div>
-                    <div class="day-header">Wed</div>
-                    <div class="day-header">Thu</div>
-                    <div class="day-header">Fri</div>
-                    <div class="day-header">Sat</div>
-                    <div class="day-header">Sun</div>
+
+                <div class="calendar-container">
+                    <div class="calendar-week-selector" id="calWeekSelector"></div>
+                    
+                    <div class="calendar-grid">
+                        <div class="day-header">Mon</div>
+                        <div class="day-header">Tue</div>
+                        <div class="day-header">Wed</div>
+                        <div class="day-header">Thu</div>
+                        <div class="day-header">Fri</div>
+                        <div class="day-header">Sat</div>
+                        <div class="day-header">Sun</div>
+                    </div>
+                    <div class="calendar-grid" id="calendarDays"></div>
                 </div>
-                <div class="calendar-grid" id="calendarDays"></div>
                 
                 <div style="margin-top: 20px;">
                     <strong>Monthly Notes:</strong>
@@ -844,7 +992,10 @@
 
             <!-- Weekly Planner -->
             <div id="weekly" class="page" data-bundle="weekly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('weekly')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>📆 Weekly Planner</h2>
@@ -901,7 +1052,10 @@
 
             <!-- Daily Planner -->
             <div id="daily" class="page" data-bundle="daily">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('daily')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>⏰ Daily Planner</h2>
@@ -994,7 +1148,10 @@
 
             <!-- Habit Tracker -->
             <div id="habits" class="page" data-bundle="monthly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('habits')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>💪 Habit Tracker</h2>
@@ -1016,7 +1173,10 @@
 
             <!-- Study Tracker -->
             <div id="study" class="page" data-bundle="study">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('study')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>🧠 Study Tracker</h2>
@@ -1052,7 +1212,10 @@
 
             <!-- Budget Sheet -->
             <div id="budget" class="page" data-bundle="monthly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('budget')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>💰 Budget Tracker</h2>
@@ -1170,7 +1333,10 @@
 
             <!-- Qur'an Reflection -->
             <div id="quran" class="page" data-bundle="study">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('quran')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>📖 Qur'an Reflection</h2>
@@ -1212,7 +1378,10 @@
 
             <!-- Life Organizer -->
             <div id="life" class="page" data-bundle="weekly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('life')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>🏡 Life Organizer</h2>
@@ -1276,7 +1445,10 @@ Sun:"></textarea>
 
             <!-- Personal Growth -->
             <div id="growth" class="page" data-bundle="monthly">
-                <button class="print-button" onclick="window.print()">🖨️ Print This Page</button>
+                <div class="button-group">
+                    <button class="print-button" onclick="window.print()">🖨️ Print</button>
+                    <button class="reset-button" onclick="showResetModal('growth')">🔄 Reset Page</button>
+                </div>
                 
                 <div class="header-print">
                     <h2>🌱 Personal Growth</h2>
@@ -1313,10 +1485,26 @@ Sun:"></textarea>
     </div>
 
     <script>
-        // Auto-save functionality
+        // Global variables
         let saveTimeout;
         let currentWeek = 0;
+        let currentCalWeek = 0;
+        let resetTarget = '';
         
+        // Page data keys mapping
+        const pageKeys = {
+            'monthly': ['monthly-name', 'monthly-notes', ...Array.from({length: 35}, (_, i) => `cal-day-${i}`)],
+            'weekly': ['week-date', 'week-priority1', 'week-priority2', 'week-priority3', 'week-mon', 'week-tue', 'week-wed', 'week-thu', 'week-fri', 'week-sat', 'week-sun', 'week-reflection'],
+            'daily': ['daily-date', 'daily-mit', 'practice-stretch', 'practice-body1', 'practice-body1-text', 'practice-read', 'practice-mind1', 'practice-mind1-text', 'practice-game', 'practice-joy1', 'practice-joy1-text', 'practice-quran', 'practice-soul1', 'practice-soul1-text', 'daily-todo', ...Array.from({length: 8}, (_, i) => `water-${i}`), 'daily-gratitude', 'daily-reflection'],
+            'habits': ['habit-month', ...Array.from({length: 310}, (_, i) => `habit-${Math.floor(i/31)}-${(i%31)+1}`)],
+            'study': ['study-date', 'study-subject', 'study-topic', 'study-points', 'study-questions', 'study-revision', 'study-notes'],
+            'budget': ['budget-period', 'income-1-name', 'income-1-amt', 'income-2-name', 'income-2-amt', 'income-3-name', 'income-3-amt', 'expense-1-name', 'expense-1-amt', 'expense-2-name', 'expense-2-amt', 'expense-3-name', 'expense-3-amt', 'expense-4-name', 'expense-4-amt', 'expense-5-name', 'expense-5-amt', 'expense-6-name', 'expense-6-amt', 'goal-1-name', 'goal-1-target', 'goal-1-saved', 'goal-2-name', 'goal-2-target', 'goal-2-saved', 'goal-3-name', 'goal-3-target', 'goal-3-saved'],
+            'quran': ['quran-date', 'quran-surah', 'quran-ayah', 'quran-meaning', 'quran-reflection', 'quran-action', 'quran-dua'],
+            'life': ['life-week', 'life-cleaning', 'life-breakfast', 'life-lunch', 'life-supper', 'life-errands', 'life-calls'],
+            'growth': ['growth-month', 'growth-goals', 'growth-quote', 'growth-learned', 'growth-wins', 'growth-improve', 'growth-reflection']
+        };
+        
+        // Save/Load functions
         function showSaveIndicator() {
             const indicator = document.getElementById('saveIndicator');
             indicator.classList.add('show');
@@ -1337,7 +1525,86 @@ Sun:"></textarea>
             return data[key] || '';
         }
 
-        // Load all saved data
+        // Export/Import functions
+        function exportData() {
+            const data = localStorage.getItem('productivityData') || '{}';
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `productivity-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Backup exported successfully!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem('productivityData', JSON.stringify(data));
+                    alert('✅ Data imported successfully! Reloading page...');
+                    location.reload();
+                } catch (error) {
+                    alert('❌ Error importing file. Make sure it\'s a valid backup file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Reset functions
+        function showResetModal(target) {
+            resetTarget = target;
+            const modal = document.getElementById('resetModal');
+            const message = document.getElementById('resetMessage');
+            
+            if (target === 'all') {
+                message.textContent = 'This will delete ALL your data across all pages and cannot be undone!';
+            } else {
+                message.textContent = `This will clear all data on the ${target} page. This cannot be undone!`;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').style.display = 'none';
+        }
+
+        function confirmReset() {
+            if (resetTarget === 'all') {
+                localStorage.removeItem('productivityData');
+                alert('✅ All data has been reset!');
+                location.reload();
+            } else {
+                const data = JSON.parse(localStorage.getItem('productivityData') || '{}');
+                const keys = pageKeys[resetTarget] || [];
+                
+                keys.forEach(key => {
+                    delete data[key];
+                });
+                
+                localStorage.setItem('productivityData', JSON.stringify(data));
+                alert(`✅ ${resetTarget.charAt(0).toUpperCase() + resetTarget.slice(1)} page has been reset!`);
+                location.reload();
+            }
+            
+            closeResetModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('resetModal');
+            if (event.target === modal) {
+                closeResetModal();
+            }
+        }
+
+        // Load all saved data on page load
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.auto-save').forEach(el => {
                 const key = el.dataset.key;
@@ -1367,6 +1634,7 @@ Sun:"></textarea>
             calculateBudget();
             calculateSavingsProgress();
             loadHabitWeek(0);
+            loadCalendarWeek(0);
         });
 
         // Auto-save on input
@@ -1435,14 +1703,58 @@ Sun:"></textarea>
             }
         }
 
-        // Generate calendar days
+        // Generate calendar with week selector
         const calendarDays = document.getElementById('calendarDays');
+        const calWeekSelector = document.getElementById('calWeekSelector');
+
+        // Create calendar week selector buttons
+        for (let w = 0; w < 5; w++) {
+            const btn = document.createElement('button');
+            btn.className = 'calendar-week-btn' + (w === 0 ? ' active' : '');
+            const start = w * 7 + 1;
+            const end = Math.min(start + 6, 31);
+            btn.textContent = `Week ${w + 1}`;
+            btn.onclick = () => loadCalendarWeek(w);
+            calWeekSelector.appendChild(btn);
+        }
+
+        // Generate all 35 calendar day cells
         for (let i = 0; i < 35; i++) {
             const dayCell = document.createElement('div');
             dayCell.className = 'day-cell';
+            dayCell.dataset.index = i;
             dayCell.innerHTML = `<input type="text" class="auto-save" data-key="cal-day-${i}" placeholder="">`;
             calendarDays.appendChild(dayCell);
         }
+
+        function loadCalendarWeek(weekNum) {
+            currentCalWeek = weekNum;
+            
+            // Update active button
+            document.querySelectorAll('.calendar-week-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === weekNum);
+            });
+            
+            // On mobile, show only the selected week
+            if (window.innerWidth < 768) {
+                const startIndex = weekNum * 7;
+                const endIndex = startIndex + 7;
+                
+                document.querySelectorAll('.day-cell').forEach((cell, i) => {
+                    cell.style.display = (i >= startIndex && i < endIndex) ? 'block' : 'none';
+                });
+            } else {
+                // On desktop, show all days
+                document.querySelectorAll('.day-cell').forEach(cell => {
+                    cell.style.display = 'block';
+                });
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            loadCalendarWeek(currentCalWeek);
+        });
 
         // Generate water tracker
         const waterTracker = document.getElementById('waterTracker');
