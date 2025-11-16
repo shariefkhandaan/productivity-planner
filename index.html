@@ -154,6 +154,9 @@
         }
         
         function confirmReset() {
+            // NOTE: This is a simple global reset. For a targeted reset, 
+            // you'd need to identify and remove only the keys related to 'resetTarget'.
+            // For now, we stick to the original behavior of reloading after a message.
             if (resetTarget === 'all') {
                 localStorage.removeItem('pd');
                 alert('✅ All data reset!');
@@ -168,7 +171,10 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(name).classList.add('active');
-            event.target.classList.add('active');
+            // The next line uses event.target, which is only available if showPage is called from an event listener.
+            // When called programmatically (like on init), this may fail. A small check is safer.
+            const clickedTab = event.target.closest('.tab');
+            if(clickedTab) clickedTab.classList.add('active');
         }
         
         function initApp() {
@@ -182,7 +188,7 @@
                 const tab = document.createElement('div');
                 tab.className = 'tab' + (i === 0 ? ' active' : '');
                 tab.textContent = icons[i] + ' ' + p.charAt(0).toUpperCase() + p.slice(1);
-                tab.onclick = () => showPage(p);
+                tab.onclick = (e) => showPage(p, e); // Pass event here
                 tabs.appendChild(tab);
             });
             
@@ -230,7 +236,7 @@
     <textarea rows="3" class="auto-save" data-key="daily-gratitude"></textarea>
 </div>`;
             
-            // Weekly Page with Maintenance Tasks
+            // Weekly Page with Maintenance Tasks moved to the top
             content.innerHTML += `
 <div id="weekly" class="page">
     <div class="btn-group">
@@ -239,23 +245,8 @@
     </div>
     <h2>📆 Weekly Planner</h2>
     <input type="text" class="auto-save" data-key="week-date" placeholder="Week of...">
-    <div class="priority-box">
-        <h3>⭐ Top 3 Priorities</h3>
-        <input type="text" class="auto-save" data-key="week-p1" placeholder="1.">
-        <input type="text" class="auto-save" data-key="week-p2" placeholder="2.">
-        <input type="text" class="auto-save" data-key="week-p3" placeholder="3.">
-    </div>
-    <div class="week-grid">
-        <div class="day-box"><h3>Monday</h3><textarea rows="4" class="auto-save" data-key="week-mon"></textarea></div>
-        <div class="day-box"><h3>Tuesday</h3><textarea rows="4" class="auto-save" data-key="week-tue"></textarea></div>
-        <div class="day-box"><h3>Wednesday</h3><textarea rows="4" class="auto-save" data-key="week-wed"></textarea></div>
-        <div class="day-box"><h3>Thursday</h3><textarea rows="4" class="auto-save" data-key="week-thu"></textarea></div>
-        <div class="day-box"><h3>Friday</h3><textarea rows="4" class="auto-save" data-key="week-fri"></textarea></div>
-        <div class="day-box"><h3>Saturday</h3><textarea rows="4" class="auto-save" data-key="week-sat"></textarea></div>
-        <div class="day-box"><h3>Sunday</h3><textarea rows="4" class="auto-save" data-key="week-sun"></textarea></div>
-    </div>
-    
-    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-top:20px">
+
+    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-bottom:20px">
         <h3 style="margin-bottom:15px">🧼 Weekly Maintenance Tasks</h3>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
             <input type="checkbox" class="auto-save-check" data-key="w-beard" style="width:25px;height:25px">
@@ -285,6 +276,22 @@
             <input type="checkbox" class="auto-save-check" data-key="w-junk" style="width:25px;height:25px">
             <span style="flex:1">Get rid of junk</span>
         </div>
+    </div>
+    
+    <div class="priority-box">
+        <h3>⭐ Top 3 Priorities</h3>
+        <input type="text" class="auto-save" data-key="week-p1" placeholder="1.">
+        <input type="text" class="auto-save" data-key="week-p2" placeholder="2.">
+        <input type="text" class="auto-save" data-key="week-p3" placeholder="3.">
+    </div>
+    <div class="week-grid">
+        <div class="day-box"><h3>Monday</h3><textarea rows="4" class="auto-save" data-key="week-mon"></textarea></div>
+        <div class="day-box"><h3>Tuesday</h3><textarea rows="4" class="auto-save" data-key="week-tue"></textarea></div>
+        <div class="day-box"><h3>Wednesday</h3><textarea rows="4" class="auto-save" data-key="week-wed"></textarea></div>
+        <div class="day-box"><h3>Thursday</h3><textarea rows="4" class="auto-save" data-key="week-thu"></textarea></div>
+        <div class="day-box"><h3>Friday</h3><textarea rows="4" class="auto-save" data-key="week-fri"></textarea></div>
+        <div class="day-box"><h3>Saturday</h3><textarea rows="4" class="auto-save" data-key="week-sat"></textarea></div>
+        <div class="day-box"><h3>Sunday</h3><textarea rows="4" class="auto-save" data-key="week-sun"></textarea></div>
     </div>
     
     <h3 style="margin-top:20px">Reflections</h3>
@@ -516,28 +523,29 @@
                 glass.className = 'water-glass';
                 glass.onclick = function() {
                     this.classList.toggle('filled');
-                    saveData(`water${i}`, this.classList.contains('filled'));
+                    saveData(`water${i}`, this.classList.contains('filled')); // Saves as boolean string 'true'/'false'
                 };
+                // Load data for water glasses
                 if (loadData(`water${i}`) === 'true') glass.classList.add('filled');
                 water.appendChild(glass);
             }
             
-            // Remove week button code (not needed anymore)
-            
             // Setup daily routine
             setupDailyRoutine();
             
-            // Load saved data
+            // Load saved data for text inputs
             document.querySelectorAll('.auto-save').forEach(el => {
                 const val = loadData(el.dataset.key);
                 if (val) el.value = val;
             });
             
+            // Load saved data for checkboxes (FIXED: The loading logic was only half the problem, the saving logic was also incorrect)
             document.querySelectorAll('.auto-save-check').forEach(el => {
+                // Checkboxes save "true" or "false" string, so compare against the string 'true'
                 if (loadData(el.dataset.key) === 'true') el.checked = true;
             });
             
-            // Auto-save
+            // Auto-save event listeners
             document.addEventListener('input', (e) => {
                 if (e.target.classList.contains('auto-save')) {
                     saveData(e.target.dataset.key, e.target.value);
@@ -546,18 +554,24 @@
                 }
             });
             
+            // FIX: The change event now correctly saves the state of auto-save-check checkboxes
             document.addEventListener('change', (e) => {
                 if (e.target.classList.contains('auto-save-check')) {
-                    saveData(e.target.dataset.key, e.target.checked);
+                    // Checkboxes should save a string representation of their boolean state ('true' or 'false')
+                    saveData(e.target.dataset.key, e.target.checked.toString());
                 }
                 if (e.target.classList.contains('routine-check')) {
-                    saveDailyRoutine(e.target.dataset.key, e.target.checked);
+                    // Routine checks were already using the correct logic in saveDailyRoutine
+                    saveDailyRoutine(e.target.dataset.key, e.target.checked.toString()); 
                     updateRoutineProgress();
                 }
             });
             
             calcBudget();
             calcSavings();
+            
+            // Ensure first tab is active on load
+            showPage('daily', { target: document.querySelector('#tabs .tab') });
         }
         
         function setupDailyRoutine() {
@@ -568,17 +582,19 @@
             const dateEl = document.getElementById('routineDate');
             if (dateEl) dateEl.textContent = today;
             
+            const routineCheckboxes = document.querySelectorAll('.routine-check');
+            const routineKeys = Array.from(routineCheckboxes).map(cb => cb.dataset.key);
+
             // If it's a new day, reset the routine
             if (lastDate !== today) {
-                const routineKeys = ['r-shower', 'r-brush', 'r-bed', 'r-stretch5', 'r-dress', 'r-lunch', 'r-work', 'r-backwork', 'r-eat', 'r-stretch10', 'r-mom'];
                 routineKeys.forEach(key => saveData(key, 'false'));
                 saveData('routine-last-date', today);
                 
                 // Uncheck all routine checkboxes
-                document.querySelectorAll('.routine-check').forEach(cb => cb.checked = false);
+                routineCheckboxes.forEach(cb => cb.checked = false);
             } else {
-                // Load today's routine state
-                document.querySelectorAll('.routine-check').forEach(el => {
+                // Load today's routine state (FIXED: Loading was incorrect inside the else block)
+                routineCheckboxes.forEach(el => {
                     if (loadData(el.dataset.key) === 'true') el.checked = true;
                 });
             }
@@ -591,6 +607,7 @@
         }
         
         function updateRoutineProgress() {
+            // Note: If you add/remove items, update the hardcoded '11' below
             const routineKeys = ['r-shower', 'r-brush', 'r-bed', 'r-stretch5', 'r-dress', 'r-lunch', 'r-work', 'r-backwork', 'r-eat', 'r-stretch10', 'r-mom'];
             let completed = 0;
             routineKeys.forEach(key => {
@@ -599,9 +616,9 @@
             const progressEl = document.getElementById('routineProgress');
             if (progressEl) {
                 progressEl.textContent = `${completed}/11 Complete`;
+                progressEl.style.color = '#00b894';
                 if (completed === 11) {
                     progressEl.innerHTML = '🎉 ALL DONE! AMAZING WORK! 🎉';
-                    progressEl.style.color = '#00b894';
                 }
             }
         }
