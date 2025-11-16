@@ -230,7 +230,7 @@
     <textarea rows="3" class="auto-save" data-key="daily-gratitude"></textarea>
 </div>`;
             
-            // Weekly Page
+            // Weekly Page with Maintenance Tasks
             content.innerHTML += `
 <div id="weekly" class="page">
     <div class="btn-group">
@@ -254,6 +254,39 @@
         <div class="day-box"><h3>Saturday</h3><textarea rows="4" class="auto-save" data-key="week-sat"></textarea></div>
         <div class="day-box"><h3>Sunday</h3><textarea rows="4" class="auto-save" data-key="week-sun"></textarea></div>
     </div>
+    
+    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-top:20px">
+        <h3 style="margin-bottom:15px">🧼 Weekly Maintenance Tasks</h3>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-beard" style="width:25px;height:25px">
+            <span style="flex:1">Shave beard</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-underarms" style="width:25px;height:25px">
+            <span style="flex:1">Shave underarms</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-private" style="width:25px;height:25px">
+            <span style="flex:1">Shave private parts</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-car" style="width:25px;height:25px">
+            <span style="flex:1">Clean car</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-room" style="width:25px;height:25px">
+            <span style="flex:1">Clean room</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-cupboard" style="width:25px;height:25px">
+            <span style="flex:1">Keep cupboard clean</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="auto-save-check" data-key="w-junk" style="width:25px;height:25px">
+            <span style="flex:1">Get rid of junk</span>
+        </div>
+    </div>
+    
     <h3 style="margin-top:20px">Reflections</h3>
     <textarea rows="3" class="auto-save" data-key="week-ref"></textarea>
 </div>`;
@@ -281,17 +314,76 @@
     <textarea rows="4" class="auto-save" data-key="month-notes"></textarea>
 </div>`;
             
-            // Habits Page
+            // Daily Routine Page (replaces Habits)
             content.innerHTML += `
 <div id="habits" class="page">
     <div class="btn-group">
         <button class="btn btn-large" onclick="window.print()">🖨️ Print</button>
         <button class="btn btn-large btn-danger" onclick="showResetModal('habits')">🔄 Reset</button>
     </div>
-    <h2>💪 Habit Tracker</h2>
-    <input type="text" class="auto-save" data-key="habit-month" placeholder="Month...">
-    <div style="display:flex;gap:8px;overflow-x:auto;margin:15px 0" id="weekBtns"></div>
-    <div class="habit-tracker" id="habitTracker"></div>
+    <h2>💪 Daily Routine</h2>
+    <p style="color:#666;margin-bottom:15px">Today: <strong id="routineDate"></strong> • Resets daily at midnight</p>
+    
+    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-bottom:20px">
+        <h3 style="margin-bottom:15px">🌅 Morning Routine</h3>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-shower" style="width:25px;height:25px">
+            <span style="flex:1">Shower</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-brush" style="width:25px;height:25px">
+            <span style="flex:1">Brush teeth</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-bed" style="width:25px;height:25px">
+            <span style="flex:1">Make bed</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-stretch5" style="width:25px;height:25px">
+            <span style="flex:1">Stretch 5 min</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-dress" style="width:25px;height:25px">
+            <span style="flex:1">Dress up</span>
+        </div>
+    </div>
+    
+    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-bottom:20px">
+        <h3 style="margin-bottom:15px">💼 Work Routine</h3>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-lunch" style="width:25px;height:25px">
+            <span style="flex:1">Prepare lunch / Plan takeaway</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-work" style="width:25px;height:25px">
+            <span style="flex:1">Get to work</span>
+        </div>
+    </div>
+    
+    <div style="background:#f8f9fa;border:2px solid #000;border-radius:10px;padding:20px;margin-bottom:20px">
+        <h3 style="margin-bottom:15px">🌙 Evening Routine</h3>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-backwork" style="width:25px;height:25px">
+            <span style="flex:1">Back from work</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-eat" style="width:25px;height:25px">
+            <span style="flex:1">Eat dinner</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-stretch10" style="width:25px;height:25px">
+            <span style="flex:1">Stretch 10 min</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:10px;background:white;border-radius:8px">
+            <input type="checkbox" class="routine-check" data-key="r-mom" style="width:25px;height:25px">
+            <span style="flex:1">Check on mom</span>
+        </div>
+    </div>
+    
+    <div style="text-align:center;padding:20px;background:#e8f5e9;border-radius:10px">
+        <h3 id="routineProgress" style="font-size:1.5em;color:#00b894">0/11 Complete</h3>
+        <p style="margin-top:10px;color:#666">Keep going, akhi! 💪</p>
+    </div>
 </div>`;
             
             // Study Page
@@ -430,17 +522,10 @@
                 water.appendChild(glass);
             }
             
-            // Week buttons
-            const weekBtns = document.getElementById('weekBtns');
-            for (let w = 0; w < 5; w++) {
-                const btn = document.createElement('button');
-                btn.className = 'week-btn' + (w === 0 ? ' active' : '');
-                btn.textContent = `Week ${w + 1}`;
-                btn.onclick = () => loadWeek(w);
-                weekBtns.appendChild(btn);
-            }
+            // Remove week button code (not needed anymore)
             
-            loadWeek(0);
+            // Setup daily routine
+            setupDailyRoutine();
             
             // Load saved data
             document.querySelectorAll('.auto-save').forEach(el => {
@@ -465,9 +550,9 @@
                 if (e.target.classList.contains('auto-save-check')) {
                     saveData(e.target.dataset.key, e.target.checked);
                 }
-                if (e.target.classList.contains('habit-checkbox')) {
-                    saveData(e.target.dataset.key, e.target.checked);
-                    updateProgress();
+                if (e.target.classList.contains('routine-check')) {
+                    saveDailyRoutine(e.target.dataset.key, e.target.checked);
+                    updateRoutineProgress();
                 }
             });
             
@@ -475,68 +560,58 @@
             calcSavings();
         }
         
-        function loadWeek(w) {
-            currentWeek = w;
-            const tracker = document.getElementById('habitTracker');
-            tracker.innerHTML = '';
+        function setupDailyRoutine() {
+            const today = new Date().toDateString();
+            const lastDate = loadData('routine-last-date');
             
-            document.querySelectorAll('.week-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === w);
-            });
+            // Show today's date
+            const dateEl = document.getElementById('routineDate');
+            if (dateEl) dateEl.textContent = today;
             
-            const start = w * 7 + 1;
-            const end = Math.min(start + 6, 31);
-            
-            const header = document.createElement('div');
-            header.className = 'habit-row';
-            header.innerHTML = '<div class="habit-name" style="background:#000;color:white;font-weight:bold">HABIT</div>';
-            for (let d = start; d <= end; d++) {
-                const day = document.createElement('div');
-                day.style.cssText = 'font-size:0.8em;font-weight:bold;text-align:center';
-                day.textContent = d;
-                header.appendChild(day);
+            // If it's a new day, reset the routine
+            if (lastDate !== today) {
+                const routineKeys = ['r-shower', 'r-brush', 'r-bed', 'r-stretch5', 'r-dress', 'r-lunch', 'r-work', 'r-backwork', 'r-eat', 'r-stretch10', 'r-mom'];
+                routineKeys.forEach(key => saveData(key, 'false'));
+                saveData('routine-last-date', today);
+                
+                // Uncheck all routine checkboxes
+                document.querySelectorAll('.routine-check').forEach(cb => cb.checked = false);
+            } else {
+                // Load today's routine state
+                document.querySelectorAll('.routine-check').forEach(el => {
+                    if (loadData(el.dataset.key) === 'true') el.checked = true;
+                });
             }
-            tracker.appendChild(header);
             
-            habits.forEach((habit, hi) => {
-                const row = document.createElement('div');
-                row.className = 'habit-row';
-                
-                const name = document.createElement('div');
-                name.className = 'habit-name';
-                name.textContent = habit;
-                row.appendChild(name);
-                
-                for (let d = start; d <= end; d++) {
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.className = 'habit-checkbox';
-                    cb.dataset.key = `h${hi}-${d}`;
-                    if (loadData(`h${hi}-${d}`) === 'true') cb.checked = true;
-                    row.appendChild(cb);
-                }
-                
-                const prog = document.createElement('div');
-                prog.className = 'habit-progress';
-                prog.id = `prog${hi}`;
-                row.appendChild(prog);
-                
-                tracker.appendChild(row);
+            updateRoutineProgress();
+        }
+        
+        function saveDailyRoutine(key, value) {
+            saveData(key, value);
+        }
+        
+        function updateRoutineProgress() {
+            const routineKeys = ['r-shower', 'r-brush', 'r-bed', 'r-stretch5', 'r-dress', 'r-lunch', 'r-work', 'r-backwork', 'r-eat', 'r-stretch10', 'r-mom'];
+            let completed = 0;
+            routineKeys.forEach(key => {
+                if (loadData(key) === 'true') completed++;
             });
-            
-            updateProgress();
+            const progressEl = document.getElementById('routineProgress');
+            if (progressEl) {
+                progressEl.textContent = `${completed}/11 Complete`;
+                if (completed === 11) {
+                    progressEl.innerHTML = '🎉 ALL DONE! AMAZING WORK! 🎉';
+                    progressEl.style.color = '#00b894';
+                }
+            }
+        }
+        
+        function loadWeek(w) {
+            // Not needed anymore - removed habit tracker
         }
         
         function updateProgress() {
-            habits.forEach((_, hi) => {
-                let count = 0;
-                for (let d = 1; d <= 31; d++) {
-                    if (loadData(`h${hi}-${d}`) === 'true') count++;
-                }
-                const pct = Math.round((count / 31) * 100);
-                const el = document.getElementById(`prog${hi}`);
-                if (el) el.textContent = pct + '%';
-            });
+            // Not needed anymore - removed habit tracker
         }
         
         function calcBudget() {
